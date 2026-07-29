@@ -1,5 +1,6 @@
 package com.orderservice.system.order;
 
+import com.orderservice.system.checkout.CheckoutResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,32 @@ public class OrderService {
             }
             return sb.toString();
         }
+
+    public CheckoutResponseDto markOrderAsPaid(Long orderId) {
+        var order = orderRepository.findByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
+
+        order.setPaymentStatus(PaymentStatus.PAID);
+        orderRepository.save(order);
+
+        return new CheckoutResponseDto(
+                order.getOrderId(),
+                order.getCustomerId(),
+                order.getPaymentStatus().name()
+        );
+    }
+
+    public List<OrderResponseDto> getAllOrders() {
+        return orderRepository.findAll()
+                .stream()
+                .map(orderMapper::toDto)
+                .toList();
+    }
+
+    public OrderResponseDto getOrderById(Long orderId) {
+        var order = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException());
+        return orderMapper.toDto(order);
+    }
 
 }

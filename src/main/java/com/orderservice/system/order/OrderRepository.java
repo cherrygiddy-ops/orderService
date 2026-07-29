@@ -4,9 +4,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository extends MongoRepository<OrderEntity, UUID> {
+
+    Optional<OrderEntity> findByOrderId(Long orderId);
 
     // Load all orders for a given customer
     List<OrderEntity> findByCustomerId(UUID customerId);

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class OrderEntity {
 
     @Id
-    private UUID orderId;
+    private Long orderId;
     private String customerId;
 
     private LocalDateTime orderDate = LocalDateTime.now();
@@ -39,6 +39,7 @@ public class OrderEntity {
         orderItems.add(item);
     }
 
+    // OrderEntity
     public static OrderEntity createOrder(CartEntity cart, String phoneNumber) {
         var order = new OrderEntity();
         order.setCart(cart);
@@ -54,5 +55,7 @@ public class OrderEntity {
 
         return order;
     }
+
+
 
 }

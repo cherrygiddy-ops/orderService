@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class OrderResponseDto {
-    private String orderId;
+    private Long orderId;
     private String paymentStatus;;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderDate;
@@ -18,3 +18,5 @@ public class OrderResponseDto {
     private String deliveryStatus;
     private String cartId;
 }
+
+
