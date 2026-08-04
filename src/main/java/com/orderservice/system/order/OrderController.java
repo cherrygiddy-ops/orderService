@@ -29,6 +29,11 @@ public class OrderController {
         return orderService.markOrderAsPaid(orderId);
     }
 
+    @GetMapping("/summary")
+    public OrderSummaryDto getOrderSummary() {
+        return orderService.getOrderSummary();
+    }
+
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<?>handleOrderNotFound(){
         return ResponseEntity.notFound().build();

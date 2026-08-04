@@ -47,7 +47,7 @@ public class ProductsController {
 
     // Delete product
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable String productId) {
         productService.deleteProduct(String.valueOf(productId));
         return ResponseEntity.noContent().build();
     }
@@ -55,7 +55,7 @@ public class ProductsController {
     // Update product
     @PutMapping("/{productId}")
     public ResponseEntity<ProductsResponseDto> updateProduct(
-            @PathVariable Integer productId,
+            @PathVariable String productId,
             @RequestBody UpdateProductRequest request) {
         return ResponseEntity.ok(productService.updateProduct(String.valueOf(productId), request));
     }

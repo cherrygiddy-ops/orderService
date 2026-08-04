@@ -4,6 +4,7 @@ import com.orderservice.system.checkout.CheckoutResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.List;
 
@@ -54,5 +55,29 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException());
         return orderMapper.toDto(order);
     }
+
+    public OrderSummaryDto getOrderSummary() {
+        List<OrderResponseDto> orders = getAllOrders();
+
+        long totalReceipts = orders.size();
+        long paidReceipts = orders.stream()
+                .filter(o -> "Paid".equalsIgnoreCase(o.getPaymentStatus()))
+                .count();
+        long pendingReceipts = orders.stream()
+                .filter(o -> "Pending".equalsIgnoreCase(o.getPaymentStatus()))
+                .count();
+        BigDecimal totalSales = orders.stream()
+                .filter(o -> "Paid".equalsIgnoreCase(o.getPaymentStatus()))
+                .map(OrderResponseDto::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        OrderSummaryDto summary = new OrderSummaryDto();
+        summary.setTotalReceipts(totalReceipts);
+        summary.setPaidReceipts(paidReceipts);
+        summary.setPendingReceipts(pendingReceipts);
+        summary.setTotalSales(totalSales);
+        return summary;
+    }
+
 
 }

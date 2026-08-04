@@ -1,0 +1,13 @@
+package com.orderservice.system.order;
+
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class OrderSummaryDto {
+    private long totalReceipts;
+    private long paidReceipts;
+    private long pendingReceipts;
+    private BigDecimal totalSales;
+}
