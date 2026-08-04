@@ -34,9 +34,19 @@ jobs:
             cd /app/hotelpos-deployment
             git pull origin main
 
-            # Redeploy only the orderservice container
-            docker compose pull orderservice
-            docker compose up -d orderservice
+            # Write Mongo + JWT secrets into .env
+            echo "MONGO_HOST=${{ secrets.MONGO_HOST }}" > .env
+            echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
+            echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+            echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
+
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}" >> .env
+            echo "JWT_ACCESS_EXPIRATION=${{ secrets.JWT_ACCESS_EXPIRATION }}" >> .env
+
+            # Redeploy only the orderservice container with env-file
+            docker compose --env-file .env pull orderservice
+            docker compose --env-file .env up -d orderservice
 
             # Show container status
             docker compose ps
