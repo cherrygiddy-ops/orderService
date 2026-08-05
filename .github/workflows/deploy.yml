@@ -42,7 +42,9 @@ jobs:
             echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
             echo "MONGO_PASSWORD=${ENCODED_PASS}" >> .env
             echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
-            echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${ENCODED_PASS}@${{ secrets.MONGO_HOST }}:27017/${{ secrets.MONGO_DB}" >> .env
+            echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${ENCODED_PASS}@${{ secrets.MONGO_HOST }}:27017/${{ secrets.MONGO_DB }}" >> .env
+
+            echo "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/" >> .env
 
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}" >> .env
