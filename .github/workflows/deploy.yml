@@ -39,6 +39,7 @@ jobs:
             echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
             echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
             echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
+            echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASSWORD }}@${{ secrets.MONGO_HOST }}:27017/${{ secrets.MONGO_DB }}" >> .env
 
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}" >> .env
