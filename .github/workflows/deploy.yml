@@ -34,12 +34,15 @@ jobs:
             cd /app/hotelpos-deployment
             git pull origin main
 
+            # Encode special characters in Mongo password (@ → %40, : → %3A)
+            ENCODED_PASS=$(printf '%s' "${{ secrets.MONGO_PASSWORD }}" | sed 's/@/%40/g; s/:/%3A/g')
+
             # Write Mongo + JWT secrets into .env
             echo "MONGO_HOST=${{ secrets.MONGO_HOST }}" > .env
             echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
-            echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+            echo "MONGO_PASSWORD=${ENCODED_PASS}" >> .env
             echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
-            echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASSWORD }}@${{ secrets.MONGO_HOST }}:27017/${{ secrets.MONGO_DB }}" >> .env
+            echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${ENCODED_PASS}@${{ secrets.MONGO_HOST }}:27017/${{ secrets.MONGO_DB}" >> .env
 
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}" >> .env
