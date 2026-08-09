@@ -1,8 +1,11 @@
 package com.orderservice.system.categories;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    CategoryEntity toEntity (CategoryRequestDto requestDto);
+
+    CategoryResponseDto toResponse(CategoryEntity entity);
+
 }

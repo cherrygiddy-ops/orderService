@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class CategoriesSecurityRules implements SecurityRules {
     @Override
     public void config(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
-        registry.requestMatchers("/categories").permitAll();
+        registry.requestMatchers("orders/categories").permitAll();
     }
 }

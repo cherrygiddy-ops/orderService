@@ -12,6 +12,6 @@ public class ProductsRequestDto {
     private String descriptions;
     private Integer quantity;
     private BigDecimal price;
-    private Byte categoryId;
+    private String categoryId;
 
 }

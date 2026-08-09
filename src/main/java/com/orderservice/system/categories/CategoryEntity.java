@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class CategoryEntity {
 
     @Id
-    private Byte id;   // You can use String or ObjectId if preferred
+    private String id;
 
     private String name;
 }

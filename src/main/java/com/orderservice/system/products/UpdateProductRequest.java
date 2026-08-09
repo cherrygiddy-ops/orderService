@@ -11,5 +11,5 @@ public class UpdateProductRequest {
     private String descriptions;
     private Integer quantity;
     private BigDecimal price;
-    private Byte categoryId;
+    private String categoryId;
 }
