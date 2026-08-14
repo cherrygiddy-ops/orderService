@@ -100,8 +100,6 @@ public class OrderService {
         summary.setPaidReceipts(paid);
         summary.setPendingReceipts(pending);
         summary.setTotalSales(sales);
-        summary.setPaidOrders(paidOrders);
-        summary.setPendingOrders(pendingOrders);
 
         return summary;
     }

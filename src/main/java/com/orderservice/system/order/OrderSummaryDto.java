@@ -12,7 +12,5 @@ public class OrderSummaryDto {
     private long pendingReceipts;
     private BigDecimal totalSales;
 
-    private List<OrderEntity> paidOrders;    // ✅ add this
-    private List<OrderEntity> pendingOrders; // ✅ add this
 }
 
