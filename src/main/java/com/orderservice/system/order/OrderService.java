@@ -80,15 +80,12 @@ public class OrderService {
                 .atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(ZoneId.of("Africa/Nairobi"));
 
-        // If your DTO expects a String
-        String formattedDate = nairobiTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        dto.setOrderDate(LocalDateTime.parse(formattedDate));
-
-        // If your DTO expects LocalDateTime instead, use:
-        // dto.setOrderDate(nairobiTime.toLocalDateTime());
+        // DTO expects LocalDateTime, so set directly
+        dto.setOrderDate(nairobiTime.toLocalDateTime());
 
         return dto;
     }
+
 
 
     public OrderSummaryDto getOrderSummary() {
