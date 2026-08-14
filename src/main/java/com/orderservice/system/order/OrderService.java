@@ -9,6 +9,8 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,6 +22,7 @@ public class OrderService {
     private static final String CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int LENGTH = 6;
     private static final SecureRandom RANDOM = new SecureRandom();
+    private static final ZoneId NAIROBI_ZONE = ZoneId.of("Africa/Nairobi");
 
 
 
@@ -72,27 +75,54 @@ public class OrderService {
     }
 
     public OrderSummaryDto getOrderSummary() {
-        List<OrderResponseDto> orders = getAllOrders();
 
-        long totalReceipts = orders.size();
-        long paidReceipts = orders.stream()
-                .filter(o -> "Paid".equalsIgnoreCase(o.getPaymentStatus()))
-                .count();
-        long pendingReceipts = orders.stream()
-                .filter(o -> "Pending".equalsIgnoreCase(o.getPaymentStatus()))
-                .count();
-        BigDecimal totalSales = orders.stream()
-                .filter(o -> "Paid".equalsIgnoreCase(o.getPaymentStatus()))
-                .map(OrderResponseDto::getTotalPrice)
+        Date start = getStartOfToday();
+        Date end = getEndOfToday();
+
+        long paid = orderRepository
+                .countByPaymentStatusAndOrderDateBetween("PAID", start, end);
+
+        long pending = orderRepository
+                .countByPaymentStatusAndOrderDateBetween("PENDING", start, end);
+
+        List<OrderEntity> paidOrders = orderRepository
+                .findByPaymentStatusAndOrderDateBetween("PAID", start, end);
+
+        BigDecimal sales = paidOrders.stream()
+                .map(OrderEntity::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        List<OrderEntity> pendingOrders = orderRepository
+                .findByPaymentStatusAndOrderDateBetween("PENDING", start, end);
+
         OrderSummaryDto summary = new OrderSummaryDto();
-        summary.setTotalReceipts(totalReceipts);
-        summary.setPaidReceipts(paidReceipts);
-        summary.setPendingReceipts(pendingReceipts);
-        summary.setTotalSales(totalSales);
+        summary.setTotalReceipts(paid);
+        summary.setPaidReceipts(paid);
+        summary.setPendingReceipts(pending);
+        summary.setTotalSales(sales);
+        summary.setPaidOrders(paidOrders);
+        summary.setPendingOrders(pendingOrders);
+
         return summary;
     }
+
+    private Date getStartOfToday() {
+        return Date.from(
+                LocalDate.now(NAIROBI_ZONE)
+                        .atStartOfDay(NAIROBI_ZONE)
+                        .toInstant()
+        );
+    }
+
+    private Date getEndOfToday() {
+        return Date.from(
+                LocalDate.now(NAIROBI_ZONE)
+                        .plusDays(1)
+                        .atStartOfDay(NAIROBI_ZONE)
+                        .toInstant()
+        );
+    }
+
 
 
 }

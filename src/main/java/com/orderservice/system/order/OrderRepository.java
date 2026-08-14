@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,10 @@ public interface OrderRepository extends MongoRepository<OrderEntity, UUID> {
                 LocalDateTime endOfDay,
                 String paymentStatus
         );
+    long countByPaymentStatusAndOrderDateBetween(
+            String status, Date start, Date end);
 
+    List<OrderEntity> findByPaymentStatusAndOrderDateBetween(
+            String status, Date start, Date end);
 
 }
