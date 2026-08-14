@@ -3,6 +3,7 @@ package com.orderservice.system.order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,4 +21,13 @@ public interface OrderRepository extends MongoRepository<OrderEntity, UUID> {
 
     // Update payment status (Mongo doesn’t support JPQL updates directly)
     // Instead, you fetch the order, update the field, and save it back in service layer
+
+
+        List<OrderEntity> findTop7ByOrderDateBetweenAndPaymentStatus(
+                LocalDateTime startOfDay,
+                LocalDateTime endOfDay,
+                String paymentStatus
+        );
+
+
 }

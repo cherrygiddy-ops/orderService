@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -42,13 +45,25 @@ public class OrderService {
                 order.getPaymentStatus().name()
         );
     }
-
     public List<OrderResponseDto> getAllOrders() {
-        return orderRepository.findAll()
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+        return orderRepository.findTop7ByOrderDateBetweenAndPaymentStatus(
+                        startOfDay, endOfDay, "PENDING"
+                )
                 .stream()
                 .map(orderMapper::toDto)
                 .toList();
     }
+
+//    public List<OrderResponseDto> getAllOrders() {
+//        return orderRepository.findAll()
+//                .stream()
+//                .map(orderMapper::toDto)
+//                .toList();
+//    }
 
     public OrderResponseDto getOrderById(Long orderId) {
         var order = orderRepository.findByOrderId(orderId)
