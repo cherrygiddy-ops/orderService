@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -73,9 +71,25 @@ public class OrderService {
 
     public OrderResponseDto getOrderById(Long orderId) {
         var order = orderRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new OrderNotFoundException());
-        return orderMapper.toDto(order);
+                .orElseThrow(OrderNotFoundException::new);
+
+        OrderResponseDto dto = orderMapper.toDto(order);
+
+        // Interpret stored LocalDateTime as UTC, then convert to Nairobi
+        ZonedDateTime nairobiTime = order.getOrderDate()
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("Africa/Nairobi"));
+
+        // If your DTO expects a String
+        String formattedDate = nairobiTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        dto.setOrderDate(LocalDateTime.parse(formattedDate));
+
+        // If your DTO expects LocalDateTime instead, use:
+        // dto.setOrderDate(nairobiTime.toLocalDateTime());
+
+        return dto;
     }
+
 
     public OrderSummaryDto getOrderSummary() {
 
