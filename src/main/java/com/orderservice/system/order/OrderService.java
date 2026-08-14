@@ -49,7 +49,9 @@ public class OrderService {
         );
     }
     public List<OrderResponseDto> getAllOrders() {
-        LocalDate today = LocalDate.now();
+        ZoneId nairobiZone = ZoneId.of("Africa/Nairobi");
+        LocalDate today = LocalDate.now(nairobiZone);
+
         LocalDateTime startOfDay = today.atStartOfDay();
         LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
 
@@ -60,6 +62,7 @@ public class OrderService {
                 .map(orderMapper::toDto)
                 .toList();
     }
+
 
 //    public List<OrderResponseDto> getAllOrders() {
 //        return orderRepository.findAll()
