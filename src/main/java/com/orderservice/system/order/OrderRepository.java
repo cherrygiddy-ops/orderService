@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface OrderRepository extends MongoRepository<OrderEntity, UUID> {
+public interface OrderRepository extends MongoRepository<OrderEntity, Long> {
 
     Optional<OrderEntity> findByOrderId(Long orderId);
 

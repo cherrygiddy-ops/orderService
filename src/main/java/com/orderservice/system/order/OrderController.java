@@ -24,6 +24,19 @@ public class OrderController {
         return orderService.getOrderById(orderId);
     }
 
+    @PutMapping("/{orderId}/items")
+    public OrderResponseDto addItemsToOrder(
+            @PathVariable Long orderId,
+            @RequestBody List<AddOrderItemRequest> items) {
+        return orderService.addItemsToOrder(orderId, items);
+    }
+    @DeleteMapping("/{orderId}/items/{productId}")
+    public OrderResponseDto removeItemFromOrder(
+            @PathVariable Long orderId,
+            @PathVariable String productId) {
+        return orderService.removeItemFromOrder(orderId, productId);
+    }
+
     @PutMapping("/{orderId}/status/paid")
     public CheckoutResponseDto markOrderAsPaid(@PathVariable Long orderId) {
         return orderService.markOrderAsPaid(orderId);
