@@ -35,4 +35,6 @@ public interface OrderRepository extends MongoRepository<OrderEntity, Long> {
     List<OrderEntity> findByPaymentStatusAndOrderDateBetween(
             String status, Date start, Date end);
 
+    List<OrderEntity> findByOrderDateBetween(Date start, Date end);
+
 }

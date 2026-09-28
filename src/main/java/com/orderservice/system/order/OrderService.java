@@ -159,18 +159,16 @@ public class OrderService {
         long pending = orderRepository
                 .countByPaymentStatusAndOrderDateBetween("PENDING", start, end);
 
-        List<OrderEntity> paidOrders = orderRepository
-                .findByPaymentStatusAndOrderDateBetween("PAID", start, end);
+        List<OrderEntity> allOrders = orderRepository
+                .findByOrderDateBetween(start, end);
 
-        BigDecimal sales = paidOrders.stream()
+        BigDecimal sales = allOrders.stream()
                 .map(OrderEntity::getTotalPrice)
+                .filter(java.util.Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        List<OrderEntity> pendingOrders = orderRepository
-                .findByPaymentStatusAndOrderDateBetween("PENDING", start, end);
-
         OrderSummaryDto summary = new OrderSummaryDto();
-        summary.setTotalReceipts(paid);
+        summary.setTotalReceipts(allOrders.size());
         summary.setPaidReceipts(paid);
         summary.setPendingReceipts(pending);
         summary.setTotalSales(sales);
